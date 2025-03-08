@@ -73,7 +73,7 @@
 // };
 
 // export default App;
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -83,27 +83,67 @@ import FeedbackForm from "./pages/FeedbackForm";
 import Footer from "./components/Footer";
 
 const App = () => {
+  // Smooth scrolling effect for the entire app
+  useEffect(() => {
+    // Add smooth scrolling behavior to all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+    
+    // Clean up event listeners on component unmount
+    return () => {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.removeEventListener('click', function (e) {
+          e.preventDefault();
+        });
+      });
+    };
+  }, []);
+
   return (
-    <div>
+    <div className="relative bg-black text-white">
       {/* Sticky Navbar */}
       <Navbar />
 
-      {/* Video Background */}
-      <Home />
+      {/* Hero Section */}
+      <section id="home" className="min-h-screen">
+        <Home />
+      </section>
 
-      {/* Sections with IDs for Smooth Scrolling */}
-      <section id="about">
-        <About />
-      </section>
-      <section id="projects">
-        <Projects />
-      </section>
-      <section id="typing-test">
-        <TypingTest />
-      </section>
-      <section id="feedback">
-        <FeedbackForm />
-      </section>
+      {/* Main Content Sections */}
+      <main>
+        <section id="about" className="relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-black to-purple-900/20 -z-10"></div>
+          <About />
+        </section>
+        
+        <section id="projects" className="relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 to-blue-900/20 -z-10"></div>
+          <Projects />
+        </section>
+        
+        <section id="typing-test" className="relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-indigo-900/20 -z-10"></div>
+          <TypingTest />
+        </section>
+        
+        <section id="feedback" className="relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-indigo-900/20 to-black -z-10"></div>
+          <FeedbackForm />
+        </section>
+      </main>
 
       {/* Footer at the Bottom */}
       <Footer />
